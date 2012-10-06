@@ -25,7 +25,7 @@ use strict;
 use warnings;
 
 my $nod = 1;
-my $face = 6;
+my $face = 20;
 my $result = 0;
 
 if (defined $ARGV[0]) {
