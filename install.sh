@@ -60,7 +60,7 @@ if [[ "$*" =~ uninstall ]] ; then
 fi
 
 if [ $ROOT -eq 0 ] ; then
-	if [ ! -e "$BIN" ] ; then
+	if [ ! -e "$BIN" ] || [[ "$*" =~ --force ]] ; then
 		echo "Copying $PWD/proll.pl to $BIN..."
 		cp proll.pl /usr/bin/proll
 	else
@@ -68,7 +68,7 @@ if [ $ROOT -eq 0 ] ; then
 	fi
 else
 	mkdir -p "$HOME/bin"
-	if [ ! -e "$HOME/bin/proll" ] ; then
+	if [ ! -e "$HOME/bin/proll" ] || [[ "$*" =~ --force ]] ; then
 		echo "Copying $PWD/proll.pl to $HOME/bin/proll..."
 		cp proll.pl "$HOME/bin/proll"
 	else
