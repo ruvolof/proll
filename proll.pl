@@ -29,25 +29,38 @@ my $PROGNAME = "PRoll";
 my $VERSION = "1.0";
 my $AUTHOR = "Francesco Ruvolo <ruvolof\@gmail.com>";
 
-my $version = undef;
-
-my $ret = GetOptions ( "version" => \$version );
-
-if (defined $version) {
+my $version = sub {
 	print "$PROGNAME $VERSION - $AUTHOR\n";
 	exit 0;
-}
+};
+
+my $usage = sub {
+	print "Usage: proll <options>\n";
+	print "Available options:\n";
+	print "	-h, --help	Print this help and exit.\n";
+	print "	--version	Print version.\n";
+	print "	XdY		Launch X dice with Y faces.\n";
+	exit 0;
+};
+
+my $ret = GetOptions ( "version" => $version,
+					   "h|help" => $usage );
 
 my $nod = 1;
 my $face = 20;
 my $result = 0;
 
 if (defined $ARGV[0]) {
-	my @ndx = split /d/, $ARGV[0];
-	my $nod = $ndx[0] ? $ndx[0] : 1;
-	my $face = $ndx[1] if defined $ndx[1];
-	for (my $i = 0; $i < $nod; $i++) {
-		$result += $face - int(rand($face));
+	if ($ARGV[0] =~ m/^\d*d\d*$/) {
+		my @ndx = split /d/, $ARGV[0];
+		my $nod = $ndx[0] ? $ndx[0] : 1;
+		my $face = $ndx[1] if defined $ndx[1];
+		for (my $i = 0; $i < $nod; $i++) {
+			$result += $face - int(rand($face));
+		}
+	}
+	else {
+		&$usage;
 	}
 }
 else {
