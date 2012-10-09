@@ -2,7 +2,7 @@ PRoll - A Perl Dice Roller
 ==========================
 
 PRoll, as you probably had already understood, stands for Perl Roll. It's a pure Perl Dice Roller.
-I wrote it bacuse I need it when gamemastering play by email session and because I'd love the idea
+I wrote it because I need it when gamemastering play by email session and because I'd love the idea
 of having a terminal based dice roller.
 
 ### Installation ###
