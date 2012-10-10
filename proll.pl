@@ -51,10 +51,10 @@ my $face = 20;
 my $result = 0;
 
 if (defined $ARGV[0]) {
-	if ($ARGV[0] =~ m/^\d*d\d*$/) {
+	if ($ARGV[0] =~ m/^\d*d{0,1}\d*$/) {
 		my @ndx = split /d/, $ARGV[0];
-		my $nod = $ndx[0] ? $ndx[0] : 1;
-		my $face = $ndx[1] if defined $ndx[1];
+		$nod = $ndx[0] ? $ndx[0] : $nod;
+		$face = defined $ndx[1] ? $ndx[1] : $face;
 		for (my $i = 0; $i < $nod; $i++) {
 			$result += $face - int(rand($face));
 		}
