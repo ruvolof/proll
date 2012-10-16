@@ -35,16 +35,23 @@ my $version = sub {
 };
 
 my $usage = sub {
-	print "Usage: proll <options>\n";
+	print "Usage: proll XdY <options>\n";
 	print "Available options:\n";
 	print "	-h, --help	Print this help and exit.\n";
+	print "	-q, --quiet	Print only the total result.\n";
+	print "	-v, --verbose	Print the result of each roll.\n";
 	print "	--version	Print version.\n";
-	print "	XdY		Launch X dice with Y faces.\n";
+	print "	XdY		Roll X dice with Y faces.\n";
 	exit 0;
 };
 
+my $quiet = undef;
+my $verbose = undef;
+
 my $ret = GetOptions ( "version" => $version,
-					   "h|help" => $usage );
+						"h|help" => $usage,
+						"q|quiet" => \$quiet,
+						"v|verbose" => \$verbose );
 
 my $nod = 1;
 my $face = 20;
@@ -55,8 +62,11 @@ if (defined $ARGV[0]) {
 		my @ndx = split /d/, $ARGV[0];
 		$nod = $ndx[0] ? $ndx[0] : $nod;
 		$face = defined $ndx[1] ? $ndx[1] : $face;
+		my $single;
 		for (my $i = 0; $i < $nod; $i++) {
-			$result += $face - int(rand($face));
+			$single = $face - int(rand($face));
+			print '#' . ($i + 1) . " -> $single\n" if $verbose and !$quiet;
+			$result += $single;
 		}
 	}
 	else {
@@ -67,6 +77,7 @@ else {
 	$result = $face - int(rand($face));
 }
 
+print "Total: " unless $quiet;
 print $result . "\n";
 
 exit 0;
