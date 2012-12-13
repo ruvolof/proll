@@ -52,6 +52,8 @@ my $ret = GetOptions ( "version" => $version,
 						"h|help" => $usage,
 						"q|quiet" => \$quiet,
 						"v|verbose" => \$verbose );
+						
+$usage->() unless $ret;
 
 my $nod = 1;
 my $face = 20;
