@@ -25,9 +25,9 @@ use strict;
 use warnings;
 use Getopt::Long;
 
-my $PROGNAME = "PRoll";
-my $VERSION = "1.0";
-my $AUTHOR = "Francesco Ruvolo <ruvolof\@gmail.com>";
+my $PROGNAME = 'PRoll';
+my $VERSION = '1.0';
+my $AUTHOR = 'Francesco Ruvolo <ruvolof@gmail.com>';
 
 my $version = sub {
 	print "$PROGNAME $VERSION - $AUTHOR\n";
