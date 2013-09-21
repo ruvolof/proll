@@ -28,6 +28,7 @@ function help {
 	echo "Usage: ./install.sh <options>"
 	echo "Available options:"
 	echo "	-h, --help	Show this help and exit."
+	echo "	--reinstall	Force reinstall."
 	echo "	uninstall	Uninstall PRoll."
 }
 
@@ -60,7 +61,7 @@ if [[ "$*" =~ uninstall ]] ; then
 fi
 
 if [ $ROOT -eq 0 ] ; then
-	if [ ! -e "$BIN" ] || [[ "$*" =~ --force ]] ; then
+	if [ ! -e "$BIN" ] || [[ "$*" =~ --reinstall ]] ; then
 		echo "Copying $PWD/proll.pl to $BIN..."
 		cp proll.pl /usr/bin/proll
 	else
@@ -68,7 +69,7 @@ if [ $ROOT -eq 0 ] ; then
 	fi
 else
 	mkdir -p "$HOME/bin"
-	if [ ! -e "$HOME/bin/proll" ] || [[ "$*" =~ --force ]] ; then
+	if [ ! -e "$HOME/bin/proll" ] || [[ "$*" =~ --reinstall ]] ; then
 		echo "Copying $PWD/proll.pl to $HOME/bin/proll..."
 		cp proll.pl "$HOME/bin/proll"
 	else
