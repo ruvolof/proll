@@ -35,7 +35,7 @@ my $version = sub {
 };
 
 my $usage = sub {
-	print "Usage: proll XdY <options>\n";
+	print "Usage: proll <options> XdY\n";
 	print "Available options:\n";
 	print "	-h, --help	Print this help and exit.\n";
 	print "	-q, --quiet	Print only the total result.\n";
