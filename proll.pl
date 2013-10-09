@@ -64,10 +64,7 @@ my $launch = undef;
 my $launch_regexp = '^(\d*)d?(\d*)(?:(\+{1,2}|\-{1,2})(\d*))?$';
 my ($dice, $fc, $op, $mod) = (undef, undef, undef, undef);
 
-if ( defined $ARGV[0] and defined $ARGV[1]  ) {
-	$launch = $ARGV[0] . $ARGV[1];
-}
-elsif ( defined $ARGV[0] ) {
+if ( defined $ARGV[0] ) {
 	$launch = $ARGV[0];
 }
 
