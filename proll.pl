@@ -35,13 +35,15 @@ my $version = sub {
 };
 
 my $usage = sub {
-	print "Usage: proll <options> XdY\n";
+	print "Usage: proll <options> XdY[+/- MOD]\n";
 	print "Available options:\n";
 	print "	-h, --help	Print this help and exit.\n";
 	print "	-q, --quiet	Print only the total result.\n";
 	print "	-v, --verbose	Print the result of each roll.\n";
 	print "	--version	Print version.\n";
 	print "	XdY		Roll X dice with Y faces.\n";
+	print "	XdY+/-M	Same as above, but add/subtract M to result.\n";
+	print "	XdY++/--M	Same as above, but add/subtract M to each roll.\n";
 	exit 0;
 };
 
@@ -53,22 +55,58 @@ my $ret = GetOptions ( "version" => $version,
 						"q|quiet" => \$quiet,
 						"v|verbose" => \$verbose );
 						
-$usage->() unless $ret;
+$usage->() unless $ret or scalar @ARGV > 1;
 
 my $nod = 1;
 my $face = 20;
 my $result = 0;
+my $launch = undef;
+my $launch_regexp = '^(\d*)d?(\d*)(?:(\+{1,2}|\-{1,2})(\d*))?$';
+my ($dice, $fc, $op, $mod) = (undef, undef, undef, undef);
 
-if (defined $ARGV[0]) {
-	if ($ARGV[0] =~ m/^\d*d{0,1}\d*$/) {
-		my @ndx = split /d/, $ARGV[0];
-		$nod = $ndx[0] ? $ndx[0] : $nod;
-		$face = defined $ndx[1] ? $ndx[1] : $face;
+if ( defined $ARGV[0] and defined $ARGV[1]  ) {
+	$launch = $ARGV[0] . $ARGV[1];
+}
+elsif ( defined $ARGV[0] ) {
+	$launch = $ARGV[0];
+}
+
+if (defined $launch) {
+	if ($launch =~ $launch_regexp) {
+		($dice, $fc, $op, $mod) = ($launch =~ m/$launch_regexp/);
+		if (defined $dice and $dice ne ''){
+			$nod = $dice;
+		}
+		if (defined $fc and $fc ne '') {
+			$face = $fc;
+		}
+		print "face = $face\n";
 		my $single;
 		for (my $i = 0; $i < $nod; $i++) {
 			$single = $face - int(rand($face));
-			print '#' . ($i + 1) . " -> $single\n" if $verbose and !$quiet;
 			$result += $single;
+			if (defined $op) {
+				if ($op eq '++'){
+					$result += $mod;
+				}
+				elsif ($op eq '--') {
+					$result -= $mod;
+				}
+			}
+			
+			if ($verbose and !$quiet) {
+				if (not defined $op or $op eq '' or (defined $op and ($op eq '+' or $op eq '-'))) {
+					print '#' . ($i + 1) . " -> $single\n";
+				}
+				else {
+					if ($op eq '++') {
+						print '#' . ($i + 1) . " -> $single + $mod = " . ($single + $mod) . "\n";
+					}
+					elsif ($op eq '--') {
+						print '#' . ($i + 1) . " -> $single - $mod = " . ($single - $mod) . "\n";
+					}
+				}
+			}
 		}
 	}
 	else {
@@ -79,7 +117,16 @@ else {
 	$result = $face - int(rand($face));
 }
 
+if (defined($op)) {
+	if ($op eq '+'){
+		$result += $mod;
+	}
+	elsif ($op eq '-') {
+		$result -= $mod;
+	}
+}
+
 print "Total: " unless $quiet;
-print $result . "\n";
+print $result, "\n";
 
 exit 0;
