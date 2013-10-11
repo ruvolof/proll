@@ -77,7 +77,6 @@ if (defined $launch) {
 		if (defined $fc and $fc ne '') {
 			$face = $fc;
 		}
-		print "face = $face\n";
 		my $single;
 		for (my $i = 0; $i < $nod; $i++) {
 			$single = $face - int(rand($face));
