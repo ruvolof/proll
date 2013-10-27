@@ -42,7 +42,7 @@ my $usage = sub {
 	print "	-v, --verbose	Print the result of each roll.\n";
 	print "	--version	Print version.\n";
 	print "	XdY		Roll X dice with Y faces.\n";
-	print "	XdY+/-M	Same as above, but add/subtract M to result.\n";
+	print "	XdY+/-M		Same as above, but add/subtract M to result.\n";
 	print "	XdY++/--M	Same as above, but add/subtract M to each roll.\n";
 	exit 0;
 };
