@@ -90,16 +90,19 @@ if (defined $launch) {
 				}
 			}
 			
-			if ($verbose and !$quiet) {
+			if ($verbose) {
 				if (not defined $op or $op eq '' or (defined $op and ($op eq '+' or $op eq '-'))) {
-					print '#' . ($i + 1) . " -> $single\n";
+					print '#' . ($i + 1) . " -> " if not $quiet;
+                    print "$single\n";
 				}
 				else {
 					if ($op eq '++') {
-						print '#' . ($i + 1) . " -> $single + $mod = " . ($single + $mod) . "\n";
+						print '#' . ($i + 1) . " -> $single + $mod = " if not $quiet;
+                        print(($single + $mod) . "\n");
 					}
 					elsif ($op eq '--') {
-						print '#' . ($i + 1) . " -> $single - $mod = " . ($single - $mod) . "\n";
+						print '#' . ($i + 1) . " -> $single - $mod = " if not $quiet;
+                        print(($single - $mod) . "\n");
 					}
 				}
 			}
