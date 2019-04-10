@@ -64,12 +64,10 @@ my $launch = undef;
 my $launch_regexp = '^(\d*)d?(\d*)(?:(\+{1,2}|\-{1,2})(\d*))?$';
 my ($dice, $fc, $op, $mod) = (undef, undef, undef, undef);
 
-if ( defined $ARGV[0] ) {
-	$launch = $ARGV[0];
-}
-
-if (defined $launch) {
-	if ($launch =~ $launch_regexp) {
+sub do_launch {
+    my $launch = $_[0];
+    
+    if ($launch =~ $launch_regexp) {
 		($dice, $fc, $op, $mod) = ($launch =~ m/$launch_regexp/);
 		if (defined $dice and $dice ne ''){
 			$nod = $dice;
@@ -111,6 +109,14 @@ if (defined $launch) {
 	else {
 		&$usage;
 	}
+}
+
+if ( defined $ARGV[0] ) {
+	$launch = $ARGV[0];
+}
+
+if (defined $launch) {
+	do_launch($launch);
 }
 else {
 	$result = $face - int(rand($face));
