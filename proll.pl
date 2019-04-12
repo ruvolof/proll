@@ -47,15 +47,41 @@ my $usage = sub {
 	exit 0;
 };
 
+my $run_test = sub {
+    my @dsize = (4, 6, 8, 10, 12, 20);
+    my $tcount = 1000000;
+    my $t_s = "$tcount" . "d";
+    for my $s (@dsize) {
+        my $cts = $t_s . $s;
+        my @launches = split /\n/, `$0 --verbose --quiet $cts`;
+        pop(@launches);
+        my %values;
+        for my $l (@launches) {
+            $values{$l}++;
+        }
+        print "Testing for d$s:\n";
+        my @k = sort {$a <=> $b} keys %values;
+        my $avgp = (1 + $s) / 2;
+        my $ravgp = 0;
+        for my $v (@k) {
+            print $v, ": ", $values{$v}, " (";
+            my $p = sprintf("%.2f", ($values{$v} / $tcount * 100));
+            print $p, "%)\t";
+            if ($v % 4 == 0 or $v == $k[-1]) {
+                print "\n";
+            }
+            $ravgp += $values{$v} * $v;
+        }
+        $ravgp /= $tcount;
+        my $avgdiff = abs ($ravgp - $avgp);
+        print "Expected mean: ", sprintf("%.2f", $avgp), "\tMean difference: ", sprintf("%.2f", $avgdiff / $avgp * 100), "% ($ravgp)\n";
+        print "\n"x2;
+    }
+    exit 0;
+};
+
 my $quiet = undef;
 my $verbose = undef;
-
-my $ret = GetOptions ( "version" => $version,
-						"h|help" => $usage,
-						"q|quiet" => \$quiet,
-						"v|verbose" => \$verbose );
-						
-$usage->() unless $ret or scalar @ARGV > 1;
 
 my $nod = 1;
 my $face = 20;
@@ -63,6 +89,14 @@ my $result = 0;
 my $launch = undef;
 my $launch_regexp = '^(\d*)d?(\d*)(?:(\+{1,2}|\-{1,2})(\d*))?$';
 my ($dice, $fc, $op, $mod) = (undef, undef, undef, undef);
+
+my $ret = GetOptions ( "version" => $version,
+                        "test" => $run_test,
+						"h|help" => $usage,
+						"q|quiet" => \$quiet,
+						"v|verbose" => \$verbose );
+						
+$usage->() unless $ret or scalar @ARGV > 1;
 
 sub do_launch {
     my $launch = $_[0];
